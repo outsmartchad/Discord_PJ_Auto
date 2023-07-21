@@ -65,7 +65,7 @@ class DiscordChannelFunctions:
                     print("It continues...")
                 time.sleep(self.wait + self.randomTime) # the waiting time between msgs
                 self.randomTime = random() * self.human_margin # re-calculate a random interval time
-                # hihihi
+
 if __name__ == '__main__':
     times = int(input("消息數量： "))
     wait = int(input("消息之間的秒數(s)： "))
