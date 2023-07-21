@@ -43,7 +43,7 @@ class DiscordChannelFunctions:
                 files = {
                     "file1": ("./leg1.png", open("text&phot/leg1.png", 'rb')),
                     "file2": ("./leg2.png", open("text&phot/leg2.png", 'rb')),
-                    "file3": ("./sliv.png", open("text&phot/sliv.png", 'rb'))
+                    "file3": ("./sliv.png", open("sliv.png", 'rb'))
                 }
 
                 now = datetime.now(hk_tz) # Get the current time in Hong Kong
