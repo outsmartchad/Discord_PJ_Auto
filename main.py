@@ -20,7 +20,7 @@ class DiscordChannelSendMsg:
             'content': f'{self.msg2}'
         }
         header = {
-            'Authorization': "MTEyOTg1NzIxNjA1NzQ1MDUxNw.GAhDgH.gvatZhFe_bjmwYpWlaL24Qfi2OuBrtgNUb9kVI"
+            'Authorization': "MTEyOTg1NzIxNjA1NzQ1MDUxNw.GBkHeS.HQiX3bWfCPJe291kGrBOF7RKAQZ2eEtmJDIMWI"
         }
 
         with requests.Session() as session:
