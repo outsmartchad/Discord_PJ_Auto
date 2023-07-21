@@ -11,7 +11,7 @@ channel_ID = 663787450652688405 # the channel id you want to send msg to
 cur_Token = "MTEyOTg1NzIxNjA1NzQ1MDUxNw.GTkB73.qwm9jA5pqMHGJaYl46QYt2m0w4IkA4fChMXmIM" # User Token for authorization to send msg
 class DiscordChannelFunctions:
     def __init__(self, times: int, wait: int, human_margin: int):
-        with open('msg.txt', encoding='utf-8') as f:
+        with open('text&phot/msg1.txt', encoding='utf-8') as f:
             self.msg2 = f.read()
         self.times = times # how many msg you want to send
         self.wait = wait # the fixed (at least) waiting time between msgs
@@ -41,9 +41,9 @@ class DiscordChannelFunctions:
         with requests.Session() as session:
             for i in range(self.times):
                 files = {
-                    "file1": ("./leg1.png", open("leg1.png", 'rb')),
-                    "file2": ("./leg2.png", open("leg2.png", 'rb')),
-                    "file3": ("./sliv.png", open("sliv.png", 'rb'))
+                    "file1": ("./leg1.png", open("text&phot/leg1.png", 'rb')),
+                    "file2": ("./leg2.png", open("text&phot/leg2.png", 'rb')),
+                    "file3": ("./sliv.png", open("text&phot/sliv.png", 'rb'))
                 }
 
                 now = datetime.now(hk_tz) # Get the current time in Hong Kong
