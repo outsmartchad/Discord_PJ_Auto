@@ -4,15 +4,20 @@ import pytz
 from datetime import datetime, timedelta
 from random import random
 from random import randint
+from random import randrange
 
 discord_url = "https://discord.com"
 hk_tz = pytz.timezone('Asia/Hong_Kong') # Get the timezone object for Hong Kong
-channel_ID = 663787450652688405 # the channel id you want to send msg to
-cur_Token = "MTEyOTg1NzIxNjA1NzQ1MDUxNw.GTkB73.qwm9jA5pqMHGJaYl46QYt2m0w4IkA4fChMXmIM" # User Token for authorization to send msg
+channel_ID = 663787450652688405 # the channel id you want to send msg to 663787450652688405, 1131819970226049076
+cur1_Token = "NjE1MzU1MzI4ODM3NzEzOTQ4.GZZMrt.ieKrx63jLJxyIS5fmc2CUNvpj9ypJoXjkxtWGo" # 21
+cur2_Token = "OTczNDgzMDkzNjk4NzA3NDk2.GlSkij.KhBuZbDwNR9y_5inh6pT-raR8UMPijKllE0Dxw" # vcder7872 -> 2,3,4,5
+
+msg_arrs = ['msg1.txt' ,'msg2.txt' , 'msg3.txt' , 'msg4.txt' , 'msg5.txt' ,'msg6.txt' , 'msg7.txt']
+img_arr = ['leg1dup.png', 'leg1.png', 'leg2.png', 'leg3.png', 'sliv1.png', 'sliv2.png']
+
 class DiscordChannelFunctions:
     def __init__(self, times: int, wait: int, human_margin: int):
-        with open('text&phot/msg1.txt', encoding='utf-8') as f:
-            self.msg2 = f.read()
+        self.msg2 = ""
         self.times = times # how many msg you want to send
         self.wait = wait # the fixed (at least) waiting time between msgs
         self.human_margin = human_margin # random margin time for making each interval time more natural (look like a real human sending)
@@ -27,24 +32,61 @@ class DiscordChannelFunctions:
         print(full_url)
         channel_Info = requests.request("GET", full_url)
         return channel_Info.text
+    def getRandomFile(self, i: int):
+        if i%2 == 0:
+            return {
+                        "file1": ("./leg1.png", open("text&phot/leg1.png", 'rb')),
+                        "file2": ("./leg2.png", open("text&phot/leg2.png", 'rb')),
+                        "file3": ("./leg3.png", open("text&phot/leg3.png", 'rb')),
+                        "file4": ("./sliv1.png", open("text&phot/sliv1.png", 'rb'))
+                    }
+        else:
+            return {
+                        "file1": ("./leg1dup.png", open("text&phot/leg1dup.png", 'rb')),
+                        "file2": ("./leg3.png", open("text&phot/leg3.png", 'rb')),
+                        "file3": ("./sliv1.png", open("text&phot/sliv1.png", 'rb')),
+                        "file4": ("./leg2.png", open("text&phot/leg2.png", 'rb')),
+                    }
+
+    def getRandomMsg(self, text: str):
+        return {
+                    "content": f'{text}',
+                    "nonce": str(self.create_nonce()),
+                    # a nonce to prevent replay attacks and ensure that each message is sent only once
+                    "tts": False
+                }
+    def getRandomToken(self):
+        ranIndex = randint(1, 2)
+        if ranIndex == 1:
+            return cur1_Token
+        else:
+            return cur2_Token
     def send_msg(self): # sending files and texts at the same time
-        payload = {
-            "content": f'{self.msg2}',
-            "nonce": str(self.create_nonce()), # a nonce to prevent replay attacks and ensure that each message is sent only once
-            "tts" : False
-        }
-        header = {
-            'Authorization': cur_Token, # token-based authentication (as is typically the case with the Discord API)
-            #'Content-Type': "application/json" # tells the server the type of data that is being sent in the request
-        }
+        random_index = randrange(7)
+        with open('text&phot/' + msg_arrs[random_index], encoding='utf-8') as f:
+            self.msg2 = f.read()
+        f.close()
+
 
         with requests.Session() as session:
             for i in range(self.times):
-                files = {
-                    "file1": ("./leg1.png", open("text&phot/leg1.png", 'rb')),
-                    "file2": ("./leg2.png", open("text&phot/leg2.png", 'rb')),
-                    "file3": ("./sliv.png", open("text&phot/sliv.png", 'rb'))
+                tempToken = self.getRandomToken()
+                header = {
+                    'Authorization': tempToken,
+                    # token-based authentication (as is typically the case with the Discord API)
+                    # 'Content-Type': "application/json" # tells the server the type of data that is being sent in the request
                 }
+                if tempToken == cur2_Token:
+                    random_index = randrange(4, 7)
+                else:
+                    random_index = randrange(4)
+                with open('text&phot/' + msg_arrs[random_index], encoding='utf-8') as f:
+                    self.msg2 = f.read()
+                payload = self.getRandomMsg(self.msg2)
+                print(msg_arrs[random_index])
+
+                f.close()
+                files = self.getRandomFile(i)
 
                 now = datetime.now(hk_tz) # Get the current time in Hong Kong
                 now_time_str = now.strftime('%Y-%m-%d %H:%M:%S') # Format the current time as a string
@@ -57,8 +99,13 @@ class DiscordChannelFunctions:
                 # https://discord.com/api/v9/channels/663787450652688405/messages
                 try: # handle exceptions that may occur when sending a single message
                     # if the request to the Discord API fails due to a connection error or invalid credentials
-                    r = session.post(discord_url+"/api/v9/channels/"+str(channel_ID)+"/messages", data=payload,
+                    if tempToken == cur1_Token:
+                        r = session.post(discord_url+"/api/v9/channels/"+str(channel_ID)+"/messages", data=payload,
                                   headers=header, files=files)
+                    else:
+                        r = session.post(discord_url + "/api/v9/channels/" + str(channel_ID) + "/messages",
+                                         data=payload,
+                                         headers=header)
                     r.raise_for_status()  # Response object that raises an exception if the response status code indicates an error
                 except requests.exceptions.RequestException as e: # whenever the server side returns an error, catch it here and just leave it -> continue the loop
                     print(f'An error occurred while sending the message: {e}')
@@ -71,5 +118,4 @@ if __name__ == '__main__':
     wait = int(input("消息之間的秒數(s)： "))
     human_margin = int(input("人為誤差範圍(s)： "))
     messageVarObject = DiscordChannelFunctions(times, wait, human_margin) # init the auto message class
-    print(messageVarObject.get_ChannelInfo(channel_ID))
     messageVarObject.send_msg() # start to send the message
