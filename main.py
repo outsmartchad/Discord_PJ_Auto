@@ -9,8 +9,8 @@ from random import randrange
 discord_url = "https://discord.com"
 hk_tz = pytz.timezone('Asia/Hong_Kong') # Get the timezone object for Hong Kong
 channel_ID = 663787450652688405 # the channel id you want to send msg to 663787450652688405, 1131819970226049076
-cur1_Token = "NjE1MzU1MzI4ODM3NzEzOTQ4.GZZMrt.ieKrx63jLJxyIS5fmc2CUNvpj9ypJoXjkxtWGo" # 21
-cur2_Token = "OTczNDgzMDkzNjk4NzA3NDk2.GlSkij.KhBuZbDwNR9y_5inh6pT-raR8UMPijKllE0Dxw" # vcder7872 -> 2,3,4,5
+cur1_Token = "Input the token here" # user1's token
+cur2_Token = "Input the token here" # user2's token
 
 msg_arrs = ['msg1.txt' ,'msg2.txt' , 'msg3.txt' , 'msg4.txt' , 'msg5.txt' ,'msg6.txt' , 'msg7.txt']
 img_arr = ['leg1dup.png', 'leg1.png', 'leg2.png', 'leg3.png', 'sliv1.png', 'sliv2.png']
@@ -96,7 +96,7 @@ class DiscordChannelFunctions:
                 next_arrival = now + timedelta(seconds=self.wait + self.randomTime + 2.8)
                 next_arrival_str = next_arrival.strftime('%Y-%m-%d %H:%M:%S')
                 print(f"下一條消息將在 {next_arrival_str} 到達")
-                # https://discord.com/api/v9/channels/663787450652688405/messages
+                
                 try: # handle exceptions that may occur when sending a single message
                     # if the request to the Discord API fails due to a connection error or invalid credentials
                     if tempToken == cur1_Token:
